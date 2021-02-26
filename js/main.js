@@ -1,3 +1,5 @@
+let score = 0
+
 let GameState = {
     init: function () {
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
@@ -26,10 +28,10 @@ let GameState = {
         
     },
     create: function () {
+        this.scoreText= this.game.add.bitmapText(game.width/2, game.height-90, "font", "", 60)
         this.scorePoints()
-        this.scoreText= this.game.add.bitmapText(game.width/2, game.height-90, "font", "SCORE: "+ this.score, 60)
         this.scoreText.anchor.setTo(0.5, 0.5)
-        console.log(this.score)
+        console.log(score)
         this.saveRotationSpeed = gameOptions.rotationSpeed
         this.rotationDirection= Phaser.Math.between(0, 1)
         this.targetArray= []
@@ -158,8 +160,9 @@ let GameState = {
                 this.targetArray[i].alpha+= 1/7
             }
             this.addTarget()
-            this.score++
-            console.log(this.score)
+            score++
+            this.scorePoints()
+            console.log(score)
         }
         else{
             this.gameOver()
@@ -168,6 +171,8 @@ let GameState = {
     },
 
     gameOver: function () {
+        score = 0
+        
         this.saveRotationSpeed = 0
         this.arm.destroy()
 
@@ -196,13 +201,8 @@ let GameState = {
     },
 
     scorePoints: function () {
-        let localValue = localStorage.getItem(gameOptions.localStorageName)
-        if (localValue === null || localValue === NaN) {
-            localStorage.setItem(gameOptions.localStorageName, 0)
-        }
-        else {
-            this.score = localStorage.getItem(gameOptions.localStorageName)
-        }
+        this.scoreText.text = "Score: " + score
+
     },
 }
 
